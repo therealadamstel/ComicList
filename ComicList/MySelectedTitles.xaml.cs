@@ -12,15 +12,13 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using ComicList.Fetcher;
-using MahApps.Metro.Controls;
 
 namespace ComicList {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for MySelectedTitles.xaml
     /// </summary>
-    public partial class MainWindow : MetroWindow {
-        public MainWindow() {
+    public partial class MySelectedTitles : UserControl {
+        public MySelectedTitles() {
             InitializeComponent();
         }
     }

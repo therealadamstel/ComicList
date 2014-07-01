@@ -1,0 +1,44 @@
+﻿<UserControl x:Class="ComicList.MySelectedTitles"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <DockPanel LastChildFill="True">
+        <Label DockPanel.Dock="Top" Margin="10" FontSize="14" FontWeight="Bold" Foreground="CornflowerBlue">
+            <Label.Content>
+                <TextBlock>
+                    <Run Text="My Titles"></Run>
+                    <Run Text="-"></Run>
+                    <Run Text="{Binding PersonalComicList.Count, Mode=OneWay}"></Run>
+                </TextBlock>
+            </Label.Content>
+        </Label>
+        <Border DockPanel.Dock="Bottom" Padding="10" BorderThickness="1" BorderBrush="DarkGray">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0" x:Name="ComicNameText"></TextBox>
+                <Button Content="add" Grid.Column="1" Style="{StaticResource SquareButtonStyle}" Command="{Binding AddMyTitleCommand}" CommandParameter="{Binding Text, ElementName=ComicNameText}"></Button>
+            </Grid>
+            <!--<StackPanel Orientation="Vertical">
+                <CheckBox Content="Omit Variant Covers" IsChecked="{Binding OmitVariantCovers}" Margin="4"></CheckBox>
+                <CheckBox Content="Show First Print Only" IsChecked="{Binding FirstPrintOnly}" Margin="4"></CheckBox>
+                <Button Content="Load" Command="{Binding LoadWeeklyComicsCommand}" Style="{StaticResource AccentedSquareButtonStyle}"></Button>
+            </StackPanel>-->
+        </Border>
+        <ListView ItemsSource="{Binding PersonalComicList}" BorderThickness="1" BorderBrush="DarkGray" Padding="10">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Title" Width="350"></GridViewColumn>
+                    <GridViewColumn Header="">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Style="{DynamicResource FlatButtonStyle}" Content="remove" Margin="4" Command="{Binding Main.RemoveMyComicCommand, Source={StaticResource Locator}}" CommandParameter="{Binding}"></Button>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </DockPanel>
+</UserControl>

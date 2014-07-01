@@ -37,9 +37,36 @@
     <Reference Include="CsvHelper">
       <HintPath>..\packages\CsvHelper.2.7.0\lib\net40-client\CsvHelper.dll</HintPath>
     </Reference>
+    <Reference Include="GalaSoft.MvvmLight.Extras.WPF45">
+      <HintPath>..\packages\MvvmLightLibs.4.3.31.1\lib\net45\GalaSoft.MvvmLight.Extras.WPF45.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.WPF45">
+      <HintPath>..\packages\MvvmLightLibs.4.3.31.1\lib\net45\GalaSoft.MvvmLight.WPF45.dll</HintPath>
+    </Reference>
+    <Reference Include="MahApps.Metro">
+      <HintPath>..\packages\MahApps.Metro.0.13.1.0\lib\net45\MahApps.Metro.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation">
+      <HintPath>..\packages\CommonServiceLocator.1.2\lib\portable-windows8+net40+sl5+windowsphone8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Selen.Wpf.Core">
+      <HintPath>..\packages\Selen.Wpf.1.0.0\lib\net45\Selen.Wpf.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Selen.Wpf.GenericAppTree">
+      <HintPath>..\packages\Selen.Wpf.1.0.0\lib\net45\Selen.Wpf.GenericAppTree.dll</HintPath>
+    </Reference>
+    <Reference Include="Selen.Wpf.GenericAppTree.Contracts">
+      <HintPath>..\packages\Selen.Wpf.1.0.0\lib\net45\Selen.Wpf.GenericAppTree.Contracts.dll</HintPath>
+    </Reference>
+    <Reference Include="Selen.Wpf.SystemStyles">
+      <HintPath>..\packages\Selen.Wpf.1.0.0\lib\net45\Selen.Wpf.SystemStyles.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\MahApps.Metro.0.13.1.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -57,6 +84,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\BooleanVisibilityConverter.cs" />
+    <Compile Include="MySelectedTitles.xaml.cs">
+      <DependentUpon>MySelectedTitles.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MyTitlesThisWeek.xaml.cs">
+      <DependentUpon>MyTitlesThisWeek.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel\MainViewModel.cs" />
+    <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="WeeklyComicListing.xaml.cs">
+      <DependentUpon>WeeklyComicListing.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -72,6 +111,18 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="MySelectedTitles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MyTitlesThisWeek.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WeeklyComicListing.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

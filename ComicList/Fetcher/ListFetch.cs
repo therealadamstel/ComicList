@@ -9,15 +9,15 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Xml;
 using CsvHelper.Configuration;
+using System.Xml.Linq;
+using System.Net;
 
 namespace ComicList.Fetcher {
     public class ListFetch {
         private string _url = "http://feeds.feedburner.com/ncrl";
         private List<ComicList> _comicLists;
-        private List<Func<ComicEntry, bool>> _filters;
 
         public ListFetch() {
-            _filters = new List<Func<ComicEntry, bool>>();
             _comicLists = new List<ComicList>();
         }
 
@@ -25,37 +25,15 @@ namespace ComicList.Fetcher {
             return _comicLists;
         }
 
-        public IEnumerable<ComicEntry> GetEntries( ComicList list ) {
-            var entries = list.Comics.ToList();
-            _filters.ForEach( f => entries = entries.Where( f ).ToList() );
-
-            return entries;
-        }
-
-        public void AddFilter( Func<ComicEntry, bool> filter ) {
-            _filters.Add( filter );
-        }
-
-        public void AddShouldBefirstPrintFilter() {
-            AddFilter( entry => entry.Title.IndexOf( "printing", StringComparison.OrdinalIgnoreCase ) == -1 );
-        }
-
-        public void OmitVariantCovers() {
-            AddFilter( entry => entry.Title.IndexOf( "variant", StringComparison.OrdinalIgnoreCase ) == -1 );
-        }
-
-        public void ClearFilters() {
-            _filters.Clear();
-        }
-
-        public void Fetch() {
+        public async Task Fetch() {
             _comicLists.Clear();
+
+            string xml = await ReadXmlFromComicListDotCom();
 
             XmlDocument document = new XmlDocument();
             XmlNamespaceManager mgr = new XmlNamespaceManager( document.NameTable );
             mgr.AddNamespace( "atom", "http://www.w3.org/2005/Atom" );
-
-            document.Load( _url );
+            document.LoadXml( xml );
 
             foreach( XmlElement entry in document.SelectNodes( "//atom:entry", mgr ) ) {
                 ComicList list = new ComicList() {
@@ -71,6 +49,16 @@ namespace ComicList.Fetcher {
 
                 _comicLists.Add( list );
             }
+        }
+
+        private async Task<string> ReadXmlFromComicListDotCom() {
+            var webClient = new WebClient();
+            var stream = await webClient.OpenReadTaskAsync( new Uri( _url ) ); // use await so we're not waiting for the connect
+            StreamReader reader = new StreamReader( stream );
+            string xml = await reader.ReadToEndAsync(); // use await in case the server isn't buffering
+            reader.Close();
+            webClient.Dispose();
+            return xml;
         }
 
         private static CsvHelper.CsvReader CreateCsvReader( string content ) {

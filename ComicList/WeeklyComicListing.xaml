@@ -1,0 +1,42 @@
+﻿<UserControl x:Class="ComicList.WeeklyComicListing"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro">
+    <Grid>
+        <DockPanel LastChildFill="True">
+            <Label Content="Comics This Week" DockPanel.Dock="Top" Margin="10" FontSize="14" FontWeight="Bold" Foreground="CornflowerBlue"></Label>
+            <Border DockPanel.Dock="Bottom" Padding="10" BorderThickness="1" BorderBrush="DarkGray">
+                <StackPanel Orientation="Vertical">
+                    <CheckBox Content="Omit Variant Covers" IsChecked="{Binding OmitVariantCovers}" Margin="4"></CheckBox>
+                    <CheckBox Content="Show First Print Only" IsChecked="{Binding FirstPrintOnly}" Margin="4"></CheckBox>
+                    <Button Content="Load" Command="{Binding LoadWeeklyComicsCommand}" Style="{StaticResource AccentedSquareButtonStyle}"></Button>
+                </StackPanel>
+            </Border>
+        
+            <ListView ItemsSource="{Binding GroupedWeeklyComics}" BorderThickness="1" BorderBrush="DarkGray" Padding="10">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Title" DisplayMemberBinding="{Binding SeriesTitle}" Width="250"></GridViewColumn>
+                        <GridViewColumn Header="Issue" DisplayMemberBinding="{Binding IssueNumber}" Width="125"></GridViewColumn>
+                        <GridViewColumn Header="">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Style="{DynamicResource FlatButtonStyle}" Content="add" Margin="4" Command="{Binding Main.AddMyComicCommand, Source={StaticResource Locator}}" CommandParameter="{Binding}"></Button>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+                <ListView.GroupStyle>
+                    <GroupStyle>
+                        <GroupStyle.HeaderTemplate>
+                            <DataTemplate>
+                                <TextBlock FontWeight="Bold" FontSize="14" Text="{Binding Name}"/>
+                            </DataTemplate>
+                        </GroupStyle.HeaderTemplate>
+                    </GroupStyle>
+                </ListView.GroupStyle>
+            </ListView>
+        </DockPanel>
+    </Grid>
+</UserControl>
