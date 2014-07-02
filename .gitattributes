@@ -24,3 +24,4 @@
 # ClickOnce
 *.manifest -crlf -diff
 *.deploy -crlf -diff
+*.application -crlf -diff
