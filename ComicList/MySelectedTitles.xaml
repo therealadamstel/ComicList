@@ -5,7 +5,7 @@
         <Label DockPanel.Dock="Top" Margin="10" FontSize="14" FontWeight="Bold" Foreground="CornflowerBlue">
             <Label.Content>
                 <TextBlock>
-                    <Run Text="My Titles"></Run>
+                    <Run Text="My Pull List"></Run>
                     <Run Text="-"></Run>
                     <Run Text="{Binding PersonalComicList.Count, Mode=OneWay}"></Run>
                 </TextBlock>
