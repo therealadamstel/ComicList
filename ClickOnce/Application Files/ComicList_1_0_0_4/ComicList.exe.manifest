@@ -1,0 +1,209 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<asmv1:assembly xsi:schemaLocation="urn:schemas-microsoft-com:asm.v1 assembly.adaptive.xsd" manifestVersion="1.0" xmlns:asmv1="urn:schemas-microsoft-com:asm.v1" xmlns="urn:schemas-microsoft-com:asm.v2" xmlns:asmv2="urn:schemas-microsoft-com:asm.v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:co.v1="urn:schemas-microsoft-com:clickonce.v1" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:co.v2="urn:schemas-microsoft-com:clickonce.v2">
+  <asmv1:assemblyIdentity name="ComicList.exe" version="1.0.0.4" publicKeyToken="38d0a4226326a4e0" language="neutral" processorArchitecture="msil" type="win32" />
+  <application />
+  <entryPoint>
+    <assemblyIdentity name="ComicList" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+    <commandLine file="ComicList.exe" parameters="" />
+  </entryPoint>
+  <trustInfo>
+    <security>
+      <applicationRequestMinimum>
+        <PermissionSet Unrestricted="true" ID="Custom" SameSite="site" />
+        <defaultAssemblyRequest permissionSetReference="Custom" />
+      </applicationRequestMinimum>
+      <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
+        <!--
+          UAC Manifest Options
+          If you want to change the Windows User Account Control level replace the 
+          requestedExecutionLevel node with one of the following.
+
+        <requestedExecutionLevel  level="asInvoker" uiAccess="false" />
+        <requestedExecutionLevel  level="requireAdministrator" uiAccess="false" />
+        <requestedExecutionLevel  level="highestAvailable" uiAccess="false" />
+
+         If you want to utilize File and Registry Virtualization for backward 
+         compatibility then delete the requestedExecutionLevel node.
+    -->
+        <requestedExecutionLevel level="asInvoker" uiAccess="false" />
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <dependency>
+    <dependentOS>
+      <osVersionInfo>
+        <os majorVersion="5" minorVersion="1" buildNumber="2600" servicePackMajor="0" />
+      </osVersionInfo>
+    </dependentOS>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.Windows.CommonLanguageRuntime" version="4.0.30319.0" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ComicList.exe" size="35840">
+      <assemblyIdentity name="ComicList" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>kUypg5jR67kqngfSLbFaTMYZ6gRMx3NBh/TQCUZIIWc=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="ComicList.Lib.dll" size="17920">
+      <assemblyIdentity name="ComicList.Lib" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>a17k5DtYWrHidxFgQlKa7WFlq5k2tUvAwzKlhwvvX4c=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="CsvHelper.dll" size="72192">
+      <assemblyIdentity name="CsvHelper" version="2.0.0.0" publicKeyToken="8C4959082BE5C823" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>YQUeRv0fgeeyxmI7ECPkbVTrFyUU4xjC0YkqTfARbg4=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="GalaSoft.MvvmLight.Extras.WPF45.dll" size="25600">
+      <assemblyIdentity name="GalaSoft.MvvmLight.Extras.WPF45" version="4.3.31.28649" publicKeyToken="0E27B6F8BE9B2EF7" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>Rpd56z1KRu4wX/jbY7b1GC92wGQ/Dg37d4dHM+VvADY=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="GalaSoft.MvvmLight.WPF45.dll" size="28672">
+      <assemblyIdentity name="GalaSoft.MvvmLight.WPF45" version="4.3.31.28649" publicKeyToken="EABBF6A5F5AF5004" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>0jStyKl07QSbX76MOI3Z2qzhyVNJAEFZlOGpNGbXc1g=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="MahApps.Metro.dll" size="779776">
+      <assemblyIdentity name="MahApps.Metro" version="0.13.1.0" publicKeyToken="F4FB5A3C4D1E5B4F" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>KpomZRlOQYhdq8xFGpBOavCB90+BOqH15g6iyHJEjdk=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Microsoft.Practices.ServiceLocation.dll" size="18120">
+      <assemblyIdentity name="Microsoft.Practices.ServiceLocation" version="1.2.0.0" publicKeyToken="31BF3856AD364E35" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>eKxwQRxxt6DGj+h0bt0/OozT9yBEsymkCrU8V4kb430=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Newtonsoft.Json.dll" size="500224">
+      <assemblyIdentity name="Newtonsoft.Json" version="6.0.0.0" publicKeyToken="30AD4FE6B2A6AEED" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>Aw5znLpgw7RgTuFXRJeuvIkrfOsM5E3Tn9Hvd2ei8TQ=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Selen.Wpf.Core.dll" size="14336">
+      <assemblyIdentity name="Selen.Wpf.Core" version="1.0.0.0" publicKeyToken="DC472ED4B6DAAA58" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>Ea8SDIUiRf+bwNlTEhN7P1i2/8tQeJC9M2+ioV889UA=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Selen.Wpf.GenericAppTree.dll" size="11264">
+      <assemblyIdentity name="Selen.Wpf.GenericAppTree" version="1.0.0.0" publicKeyToken="DC472ED4B6DAAA58" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>tUN0UAL1ivy0M0iozTdjREnv0C8a/mGnDarHSev1ano=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Selen.Wpf.GenericAppTree.Contracts.dll" size="5632">
+      <assemblyIdentity name="Selen.Wpf.GenericAppTree.Contracts" version="1.0.0.0" publicKeyToken="DC472ED4B6DAAA58" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>ogWgYtDl1js6ZZsMpsfagjCuuUjECSdRfqOByMeeCj4=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Selen.Wpf.SystemStyles.dll" size="43520">
+      <assemblyIdentity name="Selen.Wpf.SystemStyles" version="1.0.0.0" publicKeyToken="DC472ED4B6DAAA58" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>ScnFPHb5KMcBhID5mFsG/+dDgzRWJeJk4VOuMC7AJmM=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="System.Windows.Interactivity.dll" size="55904">
+      <assemblyIdentity name="System.Windows.Interactivity" version="4.5.0.0" publicKeyToken="31BF3856AD364E35" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>k/vFnkiAr8nxNsOsCXatp/P6p8rO3OXIJLM3y8qdLr8=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <file name="ComicList.exe.config" size="844">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>SsIzSdk2G+jkwpIe0nuzu4radp62X09u5PMYNf9kPxk=</dsig:DigestValue>
+    </hash>
+  </file>
+<publisherIdentity name="CN=ADAMLAPTOPNEW\Adam" issuerKeyHash="c31f5913ab13d9da6d4893ea899752e5d09f907a" /><Signature Id="StrongNameSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha256" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" /><DigestValue>mKG7xMMpO+VX0cIApe+KpKAEXl3ySuJIv30eRpIhUYQ=</DigestValue></Reference></SignedInfo><SignatureValue>omAr7kfol4dqO3qLgST2CuyoaeXVNAC5wk1gGZPC/eZZby2DyuI1U7W3DJkkqcxL+bToH10FLmJP5XYbb/9GuaFCTIZsd4B/mZPVR0NDIP+cylVLx2ZmDPnhhMavpksKECcnMY3CvEeul4674bbCdiZj0XEoevYoITD4aNfpqYI=</SignatureValue><KeyInfo Id="StrongNameKeyInfo"><KeyValue><RSAKeyValue><Modulus>t7a/ktdzDXVBwdo+bkDXX0fEb55jDs02+t4CBmXAFQ65YiO/NR3ttas92s10bcY7WHTwS5DZqimR9hMvRjuYKpeKi79YBkVLpZcqjIN0Mo6N68gievly7d3U1xSG91buPpsSVmEa8/TDCoX9pLEjoSFfpIp2Wb2DHHUL52wrat0=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><msrel:RelData xmlns:msrel="http://schemas.microsoft.com/windows/rel/2005/reldata"><r:license xmlns:r="urn:mpeg:mpeg21:2003:01-REL-R-NS" xmlns:as="http://schemas.microsoft.com/windows/pki/2005/Authenticode"><r:grant><as:ManifestInformation Hash="84512192461e7dbf48e24af25d5e04a0a48aefa500c2d157e53b29c3c4bba198" Description="" Url=""><as:assemblyIdentity name="ComicList.exe" version="1.0.0.4" publicKeyToken="38d0a4226326a4e0" language="neutral" processorArchitecture="msil" type="win32" /></as:ManifestInformation><as:SignedBy /><as:AuthenticodePublisher><as:X509SubjectName>CN=ADAMLAPTOPNEW\Adam</as:X509SubjectName></as:AuthenticodePublisher></r:grant><r:issuer><Signature Id="AuthenticodeSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha256" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" /><DigestValue>jVg+sX8QhGWgTGePaZVZcCUBg7soHodYrnYN2zWiils=</DigestValue></Reference></SignedInfo><SignatureValue>Dii6leeL803T3EnQpERlinEDEKFvXnCMipN41QwNCY8tYH9iL0w76r3mO0C5TluWrbT3TJKs0Hc/u2suq2RhGBUAAyUhc78B03ZmJ9Hz83EVHqREtw37Ko2YDd18+oo/2dZGNftIAHi/JWojAeJEgalwhttpMrZzuhykU5NYU4A=</SignatureValue><KeyInfo><KeyValue><RSAKeyValue><Modulus>t7a/ktdzDXVBwdo+bkDXX0fEb55jDs02+t4CBmXAFQ65YiO/NR3ttas92s10bcY7WHTwS5DZqimR9hMvRjuYKpeKi79YBkVLpZcqjIN0Mo6N68gievly7d3U1xSG91buPpsSVmEa8/TDCoX9pLEjoSFfpIp2Wb2DHHUL52wrat0=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><X509Data><X509Certificate>MIIB4TCCAUqgAwIBAgIQdyPJlzq0LJpKRsqkiwGynzANBgkqhkiG9w0BAQsFADAvMS0wKwYDVQQDHiQAQQBEAEEATQBMAEEAUABUAE8AUABOAEUAVwBcAEEAZABhAG0wHhcNMTQwNzAyMDQ1NzExWhcNMTUwNzAyMTA1NzExWjAvMS0wKwYDVQQDHiQAQQBEAEEATQBMAEEAUABUAE8AUABOAEUAVwBcAEEAZABhAG0wgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBALe2v5LXcw11QcHaPm5A119HxG+eYw7NNvreAgZlwBUOuWIjvzUd7bWrPdrNdG3GO1h08EuQ2aopkfYTL0Y7mCqXiou/WAZFS6WXKoyDdDKOjevIInr5cu3d1NcUhvdW7j6bElZhGvP0wwqF/aSxI6EhX6SKdlm9gxx1C+dsK2rdAgMBAAEwDQYJKoZIhvcNAQELBQADgYEASk4sa/HnLa4WQ95hTI+hXTGj0chc2KgRr/6w+/x5AXfIry+PhNuErmbhsp+QI5EraEDH3OrJE6rmAk3A/KtIbV4grqzXGfuUZgOoKrq7N3yD9MkwkhFxjHL5ceCRvb1NweSxMMd6GPvZ8AtVWzwMHchDXx8sK6/+i6CFONAWeug=</X509Certificate></X509Data></KeyInfo></Signature></r:issuer></r:license></msrel:RelData></KeyInfo></Signature></asmv1:assembly>
