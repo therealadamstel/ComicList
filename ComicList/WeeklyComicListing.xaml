@@ -4,12 +4,21 @@
              xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro">
     <Grid>
         <DockPanel LastChildFill="True">
-            <Label Content="Comics This Week" DockPanel.Dock="Top" Margin="10" FontSize="14" FontWeight="Bold" Foreground="CornflowerBlue"></Label>
+            <Grid DockPanel.Dock="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Content="Comics Released" DockPanel.Dock="Top" Margin="10" FontSize="14" FontWeight="Bold" Foreground="CornflowerBlue"></Label>
+                <ComboBox Grid.Column="1" ItemsSource="{Binding ComicLists}" SelectedItem="{Binding SelectedComicList}" DisplayMemberPath="Title" VerticalAlignment="Center" HorizontalAlignment="Stretch"></ComboBox>
+                <Button Grid.Column="2" Content="Load" Command="{Binding LoadWeeklyComicsCommand}" Style="{StaticResource AccentedSquareButtonStyle}" VerticalAlignment="Center" Margin="5,0"></Button>
+            </Grid>
             <Border DockPanel.Dock="Bottom" Padding="10" BorderThickness="1" BorderBrush="DarkGray">
                 <StackPanel Orientation="Vertical">
                     <CheckBox Content="Omit Variant Covers" IsChecked="{Binding OmitVariantCovers}" Margin="4"></CheckBox>
                     <CheckBox Content="Show First Print Only" IsChecked="{Binding FirstPrintOnly}" Margin="4"></CheckBox>
-                    <Button Content="Load" Command="{Binding LoadWeeklyComicsCommand}" Style="{StaticResource AccentedSquareButtonStyle}"></Button>
+                    <Button Content="Refresh" Command="{Binding RefreshCurrentListCommand}" Style="{StaticResource AccentedSquareButtonStyle}"></Button>
                 </StackPanel>
             </Border>
         

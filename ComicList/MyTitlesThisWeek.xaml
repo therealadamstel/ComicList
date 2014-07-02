@@ -5,7 +5,7 @@
         <Label DockPanel.Dock="Top" Margin="10" FontSize="14" FontWeight="Bold" Foreground="CornflowerBlue">
             <Label.Content>
                 <TextBlock>
-                    <Run Text="My Comics This Week"></Run>
+                    <Run Text="My Comics"></Run>
                     <Run Text="-"></Run>
                     <Run Text="{Binding MyComics.Count, Mode=OneWay}"></Run>
                 </TextBlock>

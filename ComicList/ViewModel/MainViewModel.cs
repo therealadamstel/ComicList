@@ -1,4 +1,4 @@
-using ComicList.Fetcher;
+using ComicList.Lib.Fetcher;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using System.Collections.ObjectModel;
@@ -9,6 +9,7 @@ using System.Collections.Specialized;
 using System.Threading.Tasks;
 using Microsoft.Win32;
 using System.IO;
+using ComicList.Lib.Configuration;
 
 namespace ComicList.ViewModel {
     /// <summary>
@@ -25,12 +26,24 @@ namespace ComicList.ViewModel {
     /// </summary>
     public class MainViewModel : ViewModelBase {
         private bool _isLoadingComics;
+        private SystemSettings _systemSettings;
+        private DatedComicList _selectedComicList;
+
+        public DatedComicList SelectedComicList {
+            get { return _selectedComicList; }
+            set { 
+                _selectedComicList = value; 
+                RaisePropertyChanged( () => SelectedComicList );
+                LoadComicEntries();
+            }
+        }
 
         public bool IsLoadingComics {
             get { return _isLoadingComics; }
             set { _isLoadingComics = value; RaisePropertyChanged( () => IsLoadingComics ); }
         }
 
+        public ObservableCollection<ComicList.Lib.Fetcher.DatedComicList> ComicLists { get; set; }
         public ObservableCollection<ComicEntry> WeeklyComics { get; set; }
         public ObservableCollection<ComicEntry> MyComics { get; set; }
         public ObservableCollection<string> PersonalComicList { get; set; }
@@ -41,10 +54,13 @@ namespace ComicList.ViewModel {
         public ICommand AddMyTitleCommand { get { return new RelayCommand<string>( AddMyTitle ); } }
         public ICommand RemoveMyComicCommand { get { return new RelayCommand<string>( RemoveMyComic ); } }
         public ICommand SaveMyTitlesCommand { get { return new RelayCommand( SaveMyTitles ); } }
+        public ICommand RefreshCurrentListCommand { get { return new RelayCommand( LoadComicEntries ); } }
         public bool OmitVariantCovers { get; set; }
         public bool FirstPrintOnly { get; set; }
 
         public MainViewModel() {
+            this._systemSettings = SystemSettings.Load();
+
             this.OmitVariantCovers = true;
             this.FirstPrintOnly = true;
             this.WeeklyComics = new ObservableCollection<ComicEntry>();
@@ -58,6 +74,18 @@ namespace ComicList.ViewModel {
             this.GroupedMyComics.GroupDescriptions.Add( groupDescription );
 
             LoadPersonalList();
+            LoadSavedLists();
+        }
+
+        private void LoadSavedLists() {
+            if( ComicLists == null )
+                ComicLists = new ObservableCollection<Lib.Fetcher.DatedComicList>();
+            else
+                ComicLists.Clear();
+
+            foreach( var list in _systemSettings.ComicLists.OrderByDescending( x => x.Date ) ) {
+                ComicLists.Add( list );
+            }
         }
 
         private void LoadPersonalList() {
@@ -65,10 +93,8 @@ namespace ComicList.ViewModel {
                 PersonalComicList = new ObservableCollection<string>();
             PersonalComicList.Clear();
 
-            if( Properties.Settings.Default.MyComicTitles != null ) {
-                foreach( string title in Properties.Settings.Default.MyComicTitles ) {
-                    PersonalComicList.Add( title );
-                }
+            foreach( var userComicSelection in _systemSettings.UserComicSelection ) {
+                PersonalComicList.Add( userComicSelection.TitleText );
             }
         }
 
@@ -100,27 +126,19 @@ namespace ComicList.ViewModel {
         }
 
         private void AddMyTitle( string title ) {
-            if( Properties.Settings.Default.MyComicTitles == null )
-                Properties.Settings.Default.MyComicTitles = new StringCollection();
+            _systemSettings.AddUserComicSelection( new UserComicSelection() { TitleText = title } );
+            _systemSettings.Save();
 
-            if( !Properties.Settings.Default.MyComicTitles.Cast<string>().Any( x => x.Equals( title, System.StringComparison.OrdinalIgnoreCase ) ) ) {
-                Properties.Settings.Default.MyComicTitles.Add( title );
-                Properties.Settings.Default.Save();
-
-                LoadPersonalList();
-                FilterComicsByPersonalizedList();
-            }
+            LoadPersonalList();
+            FilterComicsByPersonalizedList();
         }
 
         private void RemoveMyComic( string title ) {
-            if( Properties.Settings.Default.MyComicTitles.Cast<string>().Any( x => x.Equals( title, System.StringComparison.OrdinalIgnoreCase ) ) ) {
-                var item = Properties.Settings.Default.MyComicTitles.Cast<string>().Where( x => x.ToLower() == title.ToLower() ).First();
-                Properties.Settings.Default.MyComicTitles.Remove( item );
-                Properties.Settings.Default.Save();
+            _systemSettings.RemoveUserComicSelection( new UserComicSelection() { TitleText = title } );
+            _systemSettings.Save();
 
-                LoadPersonalList();
-                FilterComicsByPersonalizedList();
-            }
+            LoadPersonalList();
+            FilterComicsByPersonalizedList();
         }
 
         private void FilterComicsByPersonalizedList() {
@@ -137,19 +155,35 @@ namespace ComicList.ViewModel {
             var listFetch = new ListFetch();
             await listFetch.Fetch();
 
-            var list = listFetch.GetLists().First();
+            SelectedComicList = null;
 
-            if( FirstPrintOnly )
-                list.AddShouldBefirstPrintFilter();
-            if( OmitVariantCovers )
-                list.OmitVariantCovers();
-
-            var comics = list.GetEntries();
-
-            WeeklyComics.Clear();
-            foreach( var comic in comics ) {
-                WeeklyComics.Add( comic );
+            ComicLists.Clear();
+            foreach( var list in listFetch.GetLists() ) {
+                _systemSettings.AddComicList( list );
             }
+            _systemSettings.Save();
+
+            LoadSavedLists();
+        }
+
+        private void LoadComicEntries() {
+            if( SelectedComicList == null ) {
+                WeeklyComics.Clear();
+            }
+            else {
+                SelectedComicList.ClearFilters();
+                if( FirstPrintOnly )
+                    SelectedComicList.AddShouldBefirstPrintFilter();
+                if( OmitVariantCovers )
+                    SelectedComicList.OmitVariantCovers();
+
+                WeeklyComics.Clear();
+                foreach( var comic in SelectedComicList.GetEntries() ) {
+                    WeeklyComics.Add( comic );
+                }
+            }
+
+            FilterComicsByPersonalizedList();
         }
     }
 }

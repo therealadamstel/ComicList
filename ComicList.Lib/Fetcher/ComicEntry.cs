@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CsvHelper.Configuration;
 
-namespace ComicList.Fetcher {
+namespace ComicList.Lib.Fetcher {
     public class ComicEntry {
         public DateTime ReleaseDate { get; set; }
         public string Publisher { get; set; }

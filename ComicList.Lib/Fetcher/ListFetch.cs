@@ -12,16 +12,16 @@ using CsvHelper.Configuration;
 using System.Xml.Linq;
 using System.Net;
 
-namespace ComicList.Fetcher {
+namespace ComicList.Lib.Fetcher {
     public class ListFetch {
         private string _url = "http://feeds.feedburner.com/ncrl";
-        private List<ComicList> _comicLists;
+        private List<DatedComicList> _comicLists;
 
         public ListFetch() {
-            _comicLists = new List<ComicList>();
+            _comicLists = new List<DatedComicList>();
         }
 
-        public IEnumerable<ComicList> GetLists() {
+        public IEnumerable<DatedComicList> GetLists() {
             return _comicLists;
         }
 
@@ -36,10 +36,16 @@ namespace ComicList.Fetcher {
             document.LoadXml( xml );
 
             foreach( XmlElement entry in document.SelectNodes( "//atom:entry", mgr ) ) {
-                ComicList list = new ComicList() {
+                DatedComicList list = new DatedComicList() {
                     Date = DateTime.Parse( entry.SelectSingleNode( "atom:published", mgr ).InnerText ),
                     Title = entry.SelectSingleNode( "atom:title", mgr ).InnerText
                 };
+                if( list.Title.StartsWith( "ComicList: " ) ) {
+                    list.Title = list.Title.Substring( "ComicList: ".Length );
+                }
+                if( list.Title.EndsWith( " (CSV)" ) ) {
+                    list.Title = list.Title.Substring( 0, list.Title.Length - " (CSV)".Length );
+                }
 
                 var content = ReadFormattedContent( mgr, entry );
 

@@ -85,6 +85,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Converters\BooleanVisibilityConverter.cs" />
+    <Compile Include="CreditsDialog.xaml.cs">
+      <DependentUpon>CreditsDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MySelectedTitles.xaml.cs">
       <DependentUpon>MySelectedTitles.xaml</DependentUpon>
     </Compile>
@@ -96,6 +99,10 @@
     <Compile Include="WeeklyComicListing.xaml.cs">
       <DependentUpon>WeeklyComicListing.xaml</DependentUpon>
     </Compile>
+    <Page Include="CreditsDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -104,9 +111,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Fetcher\ComicEntry.cs" />
-    <Compile Include="Fetcher\ComicList.cs" />
-    <Compile Include="Fetcher\ListFetch.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -151,6 +155,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ComicList.Lib\ComicList.Lib.csproj">
+      <Project>{8fb546a1-e540-447a-94d8-0e7cfaba3a26}</Project>
+      <Name>ComicList.Lib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

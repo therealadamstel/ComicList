@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ComicList.Fetcher {
-    public class ComicList {
+namespace ComicList.Lib.Fetcher {
+    public class DatedComicList {
         private List<Func<ComicEntry, bool>> _filters;
 
         public DateTime Date { get; set; }
         public string Title { get; set; }
         public List<ComicEntry> Comics { get; set; }
 
-        public ComicList() {
+        public DatedComicList() {
             Comics = new List<ComicEntry>();
             _filters = new List<Func<ComicEntry, bool>>();
         }

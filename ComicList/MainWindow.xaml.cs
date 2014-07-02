@@ -12,8 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using ComicList.Fetcher;
 using MahApps.Metro.Controls;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace ComicList {
     /// <summary>
@@ -22,6 +22,17 @@ namespace ComicList {
     public partial class MainWindow : MetroWindow {
         public MainWindow() {
             InitializeComponent();
+        }
+
+        private void ShowCredits_Click( object sender, RoutedEventArgs e ) {
+            var dialogBody = new CreditsDialog();
+            var dialog = new SimpleDialog() {
+                DialogBody = dialogBody
+            };
+            dialogBody.Close += ( o, args ) => {
+                this.HideMetroDialogAsync( dialog );
+            };
+            this.ShowMetroDialogAsync( dialog );
         }
     }
 }
