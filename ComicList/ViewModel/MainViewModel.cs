@@ -70,6 +70,7 @@ namespace ComicList.ViewModel {
         public ICommand RemoveMyComicCommand { get { return new RelayCommand<string>( RemoveMyComic ); } }
         public ICommand SaveMyTitlesCommand { get { return new RelayCommand( SaveMyTitles ); } }
         public ICommand RefreshCurrentListCommand { get { return new RelayCommand( LoadComicEntries ); } }
+        public ICommand FilterCurrentListCommand { get { return new RelayCommand<string>( LoadComicEntries ); } }
         public bool OmitVariantCovers { get; set; }
         public bool FirstPrintOnly { get; set; }
 
@@ -181,7 +182,12 @@ namespace ComicList.ViewModel {
             LoadSavedLists();
         }
 
-        private void LoadComicEntries() {
+        private void LoadComicEntries()
+        {
+            LoadComicEntries(null);
+        }
+
+        private void LoadComicEntries(string filter) {
             if( SelectedComicList == null ) {
                 WeeklyComics.Clear();
             }
@@ -191,6 +197,8 @@ namespace ComicList.ViewModel {
                     SelectedComicList.AddShouldBefirstPrintFilter();
                 if( OmitVariantCovers )
                     SelectedComicList.OmitVariantCovers();
+                if (!string.IsNullOrEmpty(filter))
+                    SelectedComicList.AddFilter(entry => entry.Title.ToLower().Contains(filter.ToLower()));
 
                 WeeklyComics.Clear();
                 foreach( var comic in SelectedComicList.GetEntries() ) {

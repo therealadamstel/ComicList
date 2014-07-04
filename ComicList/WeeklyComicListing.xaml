@@ -35,6 +35,19 @@
                 <StackPanel Orientation="Vertical">
                     <CheckBox Content="Omit Variant Covers" IsChecked="{Binding OmitVariantCovers}" Margin="4"></CheckBox>
                     <CheckBox Content="Show First Print Only" IsChecked="{Binding FirstPrintOnly}" Margin="4"></CheckBox>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" x:Name="ComicNameFilter">
+                            <TextBox.InputBindings>
+                                <KeyBinding Key="Enter" Command="{Binding FilterCurrentListCommand}" CommandParameter="{Binding Text, ElementName=ComicNameFilter}"/>
+                            </TextBox.InputBindings>
+                        </TextBox>
+                        <Button Content="x" Grid.Column="0" Style="{StaticResource SquareButtonStyle}" Width="20" HorizontalAlignment="Right" Click="ClearComicNameFilter_Click"></Button>
+                        <Button Content="filter" Grid.Column="1" Style="{StaticResource SquareButtonStyle}" Command="{Binding FilterCurrentListCommand}" CommandParameter="{Binding Text, ElementName=ComicNameFilter}"></Button>
+                    </Grid>
                     <Button Content="Refresh" Command="{Binding RefreshCurrentListCommand}" Style="{StaticResource AccentedSquareButtonStyle}"></Button>
                 </StackPanel>
             </Border>

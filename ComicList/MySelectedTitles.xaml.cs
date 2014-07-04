@@ -36,5 +36,11 @@ namespace ComicList {
         public MySelectedTitles() {
             InitializeComponent();
         }
+
+        private void ClearComicName_Click(object sender, RoutedEventArgs e)
+        {
+            ComicNameText.Clear();
+            ComicNameText.Focus();
+        }
     }
 }

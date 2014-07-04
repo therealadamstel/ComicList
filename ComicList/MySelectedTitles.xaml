@@ -35,6 +35,7 @@
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <TextBox Grid.Column="0" x:Name="ComicNameText"></TextBox>
+                <Button Content="x" Grid.Column="0" Style="{StaticResource SquareButtonStyle}" Width="20" HorizontalAlignment="Right" Click="ClearComicName_Click"></Button>
                 <Button Content="add" Grid.Column="1" Style="{StaticResource SquareButtonStyle}" Command="{Binding AddMyTitleCommand}" CommandParameter="{Binding Text, ElementName=ComicNameText}"></Button>
             </Grid>
             <!--<StackPanel Orientation="Vertical">
