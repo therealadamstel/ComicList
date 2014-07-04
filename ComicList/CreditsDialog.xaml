@@ -40,7 +40,7 @@
             <Hyperlink NavigateUri="http://creativecommons.org/licenses/by-nc-sa/3.0/us/" RequestNavigate="Hyperlink_RequestNavigate">http://creativecommons.org/licenses/by-nc-sa/3.0/us/</Hyperlink>
             <LineBreak></LineBreak>
             <LineBreak></LineBreak>
-            <Run Text="This application is licensed under the GPL v3 and copyright Adam Sills 2014"></Run>
+            <Run Text="This application is licensed under the GPL v3 and copyright the original code submitters"></Run>
             <LineBreak></LineBreak>
             <Hyperlink NavigateUri="https://www.gnu.org/licenses/gpl.html" RequestNavigate="Hyperlink_RequestNavigate">https://www.gnu.org/licenses/gpl.html</Hyperlink>
         </TextBlock>
