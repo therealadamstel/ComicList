@@ -36,11 +36,5 @@ namespace ComicList {
         public WeeklyComicListing() {
             InitializeComponent();
         }
-
-        private void ClearComicNameFilter_Click(object sender, RoutedEventArgs e)
-        {
-            this.ComicNameFilter.Clear();
-            this.ComicNameFilter.Focus();
-        }
     }
 }

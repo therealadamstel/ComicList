@@ -17,7 +17,8 @@
 -->
 <UserControl x:Class="ComicList.MySelectedTitles"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro">
     <DockPanel LastChildFill="True">
         <Label DockPanel.Dock="Top" Margin="10" FontSize="14" FontWeight="Bold" Foreground="CornflowerBlue">
             <Label.Content>
@@ -29,15 +30,11 @@
             </Label.Content>
         </Label>
         <Border DockPanel.Dock="Bottom" Padding="10" BorderThickness="1" BorderBrush="DarkGray">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <TextBox Grid.Column="0" x:Name="ComicNameText"></TextBox>
-                <Button Content="x" Grid.Column="0" Style="{StaticResource SquareButtonStyle}" Width="20" HorizontalAlignment="Right" Click="ClearComicName_Click"></Button>
-                <Button Content="add" Grid.Column="1" Style="{StaticResource SquareButtonStyle}" Command="{Binding AddMyTitleCommand}" CommandParameter="{Binding Text, ElementName=ComicNameText}"></Button>
-            </Grid>
+            <TextBox x:Name="ComicNameText" controls:TextboxHelper.ClearTextButton="True" controls:TextboxHelper.Watermark="Enter title and press enter to add">
+                <TextBox.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding AddMyTitleCommand}" CommandParameter="{Binding Text, ElementName=ComicNameText}"></KeyBinding>
+                </TextBox.InputBindings>
+            </TextBox>
             <!--<StackPanel Orientation="Vertical">
                 <CheckBox Content="Omit Variant Covers" IsChecked="{Binding OmitVariantCovers}" Margin="4"></CheckBox>
                 <CheckBox Content="Show First Print Only" IsChecked="{Binding FirstPrintOnly}" Margin="4"></CheckBox>
