@@ -29,12 +29,14 @@
                 </TextBlock>
             </Label.Content>
         </Label>
-        <Border DockPanel.Dock="Bottom" Padding="10" BorderThickness="1" BorderBrush="DarkGray">
-            <TextBox x:Name="ComicNameText" controls:TextboxHelper.ClearTextButton="True" controls:TextboxHelper.Watermark="Enter title and press enter to add">
-                <TextBox.InputBindings>
-                    <KeyBinding Key="Enter" Command="{Binding AddMyTitleCommand}" CommandParameter="{Binding Text, ElementName=ComicNameText}"></KeyBinding>
-                </TextBox.InputBindings>
-            </TextBox>
+        <Border DockPanel.Dock="Bottom" Padding="10" BorderThickness="1" BorderBrush="DarkGray" Height="150">
+            <StackPanel Orientation="Vertical">
+                <TextBox x:Name="ComicNameText" controls:TextboxHelper.ClearTextButton="True" controls:TextboxHelper.Watermark="Enter title and press enter to add" Text="{Binding AddTitleText, UpdateSourceTrigger=PropertyChanged}">
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Enter" Command="{Binding AddMyTitleCommand}"></KeyBinding>
+                    </TextBox.InputBindings>
+                </TextBox>
+            </StackPanel>
         </Border>
         <ListView ItemsSource="{Binding PersonalComicList}" BorderThickness="1" BorderBrush="DarkGray" Padding="10">
             <ListView.View>

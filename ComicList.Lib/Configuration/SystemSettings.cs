@@ -79,6 +79,8 @@ namespace ComicList.Lib.Configuration {
         }
 
         public void Save() {
+            this.UserComicSelection.Sort( x => x.TitleText );
+
             string filePath = ConfigPaths.GetConfigurationFilePath();
             if( !Directory.Exists( Path.GetDirectoryName( filePath ) ) ) {
                 Directory.CreateDirectory( Path.GetDirectoryName( filePath ) );

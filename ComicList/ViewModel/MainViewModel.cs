@@ -45,6 +45,18 @@ namespace ComicList.ViewModel {
         private bool _isLoadingComics;
         private SystemSettings _systemSettings;
         private DatedComicList _selectedComicList;
+        private string _filterText;
+        private string _addTitleText;
+
+        public string AddTitleText {
+            get { return _addTitleText; }
+            set { _addTitleText = value; RaisePropertyChanged( () => AddTitleText ); }
+        }
+
+        public string FilterText {
+            get { return _filterText; }
+            set { _filterText = value; RaisePropertyChanged( () => FilterText ); }
+        }
 
         public DatedComicList SelectedComicList {
             get { return _selectedComicList; }
@@ -68,12 +80,19 @@ namespace ComicList.ViewModel {
         public CollectionView GroupedWeeklyComics { get; set; }
         public ICommand LoadWeeklyComicsCommand { get { return new RelayCommand( LoadWeeklyComics ); } }
         public ICommand AddMyComicCommand { get { return new RelayCommand<ComicEntry>( AddMyComic ); } }
-        public ICommand AddMyTitleCommand { get { return new RelayCommand<string>( AddMyTitle ); } }
+        public ICommand AddMyTitleCommand { get { return new RelayCommand( AddMyTitle ); } }
         public ICommand RemoveMyComicCommand { get { return new RelayCommand<string>( RemoveMyComic ); } }
         public ICommand SaveMyTitlesCommand { get { return new RelayCommand( SaveMyTitles ); } }
         public ICommand RefreshCurrentListCommand { get { return new RelayCommand( LoadComicEntries ); } }
-        public ICommand FilterCurrentListCommand { get { return new RelayCommand<string>( LoadComicEntries ); } }
         public ICommand ViewComicCommand { get { return new RelayCommand<ComicEntry>( ViewComic, CanViewComic ); } }
+        public ICommand ClearFilterTextCommand {
+            get {
+                return new RelayCommand( () => {
+                    FilterText = "";
+                    LoadComicEntries();
+                } );
+            }
+        }
         public bool OmitVariantCovers { get; set; }
         public bool FirstPrintOnly { get; set; }
 
@@ -152,6 +171,11 @@ namespace ComicList.ViewModel {
             }
         }
 
+        private void AddMyTitle() {
+            AddMyTitle( AddTitleText );
+            AddTitleText = "";
+        }
+
         private void AddMyTitle( string title ) {
             _systemSettings.AddUserComicSelection( new UserComicSelection() { TitleText = title } );
             _systemSettings.Save();
@@ -193,12 +217,7 @@ namespace ComicList.ViewModel {
             LoadSavedLists();
         }
 
-        private void LoadComicEntries()
-        {
-            LoadComicEntries(null);
-        }
-
-        private void LoadComicEntries(string filter) {
+        private void LoadComicEntries() {
             if( SelectedComicList == null ) {
                 WeeklyComics.Clear();
             }
@@ -208,8 +227,8 @@ namespace ComicList.ViewModel {
                     SelectedComicList.AddShouldBefirstPrintFilter();
                 if( OmitVariantCovers )
                     SelectedComicList.OmitVariantCovers();
-                if (!string.IsNullOrEmpty(filter))
-                    SelectedComicList.AddFilter(entry => entry.Title.ToLower().Contains(filter.ToLower()));
+                if( !string.IsNullOrEmpty( FilterText ) )
+                    SelectedComicList.AddFilter( entry => entry.Title.ToLower().Contains( FilterText.ToLower() ) );
 
                 WeeklyComics.Clear();
                 foreach( var comic in SelectedComicList.GetEntries() ) {

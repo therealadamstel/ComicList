@@ -67,6 +67,7 @@
     <Compile Include="Fetcher\ComicEntry.cs" />
     <Compile Include="Fetcher\ComicList.cs" />
     <Compile Include="Fetcher\ListFetch.cs" />
+    <Compile Include="ObservableCollectionExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

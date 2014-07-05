@@ -31,9 +31,9 @@ namespace ComicList.Lib.Fetcher {
         public string SeriesTitle {
             get {
                 if( Title.IndexOf( "#" ) > -1 ) {
-                    return Title.Substring( 0, Title.IndexOf( "#" ) );
+                    return Title.Substring( 0, Title.IndexOf( "#" ) ).Trim();
                 }
-                return Title;
+                return Title.Trim();
             }
         }
 
