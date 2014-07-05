@@ -26,6 +26,8 @@ using System.Xml;
 using CsvHelper.Configuration;
 using System.Xml.Linq;
 using System.Net;
+using HtmlAgilityPack;
+using System.Text.RegularExpressions;
 
 namespace ComicList.Lib.Fetcher {
     public class ListFetch {
@@ -43,60 +45,68 @@ namespace ComicList.Lib.Fetcher {
         public async Task Fetch() {
             _comicLists.Clear();
 
-            string xml = await ReadXmlFromComicListDotCom();
+            string baseUrl = "http://www.comiclist.com/index.php/newreleases/";
 
-            XmlDocument document = new XmlDocument();
-            XmlNamespaceManager mgr = new XmlNamespaceManager( document.NameTable );
-            mgr.AddNamespace( "atom", "http://www.w3.org/2005/Atom" );
-            document.LoadXml( xml );
+            var lastWeekTask = ReadWeekListHtml( baseUrl + "last-week" );
+            var thisWeekTask = ReadWeekListHtml( baseUrl + "this-week" );
+            var nextWeekTask = ReadWeekListHtml( baseUrl + "next-week" );
 
-            foreach( XmlElement entry in document.SelectNodes( "//atom:entry", mgr ) ) {
-                DatedComicList list = new DatedComicList() {
-                    Date = DateTime.Parse( entry.SelectSingleNode( "atom:published", mgr ).InnerText ),
-                    Title = entry.SelectSingleNode( "atom:title", mgr ).InnerText
-                };
-                if( list.Title.StartsWith( "ComicList: " ) ) {
-                    list.Title = list.Title.Substring( "ComicList: ".Length );
-                }
-                if( list.Title.EndsWith( " (CSV)" ) ) {
-                    list.Title = list.Title.Substring( 0, list.Title.Length - " (CSV)".Length );
-                }
+            string htmlLastWeek = await lastWeekTask;
+            string htmlThisWeek = await thisWeekTask;
+            string htmlNextWeek = await nextWeekTask;
 
-                var content = ReadFormattedContent( mgr, entry );
-
-                using( CsvHelper.CsvReader csvReader = CreateCsvReader( content ) ) {
-                    list.Comics.AddRange( csvReader.GetRecords<ComicEntry>() );
-                }
-
-                _comicLists.Add( list );
-            }
+            _comicLists.Add( ParseComicList( htmlLastWeek ) );
+            _comicLists.Add( ParseComicList( htmlThisWeek ) );
+            _comicLists.Add( ParseComicList( htmlNextWeek ) );
         }
 
-        private async Task<string> ReadXmlFromComicListDotCom() {
+        private DatedComicList ParseComicList( string html ) {
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml( html );
+
+            string title = doc.DocumentNode.SelectSingleNode( "//h3[@class='bTitle']" ).InnerText;
+            if( title.StartsWith( "ComicList: " ) ) {
+                title = title.Substring( "ComicList: ".Length );
+            }
+            if( title.EndsWith( "(1 Week Out)" ) ) {
+                title = title.Substring( 0, title.Length - "(1 Week Out)".Length );
+            }
+            title = title.Trim();
+
+            DatedComicList list = new DatedComicList();
+            list.Title = title;
+            list.Date = DateTime.Parse( Regex.Match(title, @"\d{2}/\d{2}/\d{4}").Value);
+
+            foreach( var publisherNode in doc.DocumentNode.SelectNodes( "//p/a[starts-with(@href, 'http://www.shareasale.com/')]/b/u" ) ) {
+                string publisher = publisherNode.InnerText;
+
+                HtmlNode firstParent = publisherNode.Ancestors( "p" ).First();
+                foreach( var comicNode in firstParent.SelectNodes( "a[starts-with(@href, 'http://www.shareasale.com/')]" ).Skip(1) ) {
+                    string href = comicNode.Attributes["href"].Value;
+                    string comicTitle = comicNode.InnerText;
+
+                    ComicEntry entry = new ComicEntry() {
+                        Title = comicTitle,
+                        Publisher = publisher,
+                        ReleaseDate = list.Date,
+                        Price = "",
+                        Url = HttpUtility.HtmlDecode( href )
+                    };
+                    list.Comics.Add( entry );   
+                }
+            }
+            
+            return list;
+        }
+
+        private async Task<string> ReadWeekListHtml( string url ) {
             var webClient = new WebClient();
-            var stream = await webClient.OpenReadTaskAsync( new Uri( _url ) ); // use await so we're not waiting for the connect
+            var stream = await webClient.OpenReadTaskAsync( new Uri( url ) ); // use await so we're not waiting for the connect
             StreamReader reader = new StreamReader( stream );
             string xml = await reader.ReadToEndAsync(); // use await in case the server isn't buffering
             reader.Close();
             webClient.Dispose();
             return xml;
-        }
-
-        private static CsvHelper.CsvReader CreateCsvReader( string content ) {
-            StringReader stringReader = new StringReader( content );
-            CsvHelper.CsvReader csvReader = new CsvHelper.CsvReader( stringReader );
-            csvReader.Configuration.RegisterClassMap( new ComicEntry.Map() );
-            return csvReader;
-        }
-
-        private static string ReadFormattedContent( XmlNamespaceManager mgr, XmlElement entry ) {
-            var content = entry.SelectSingleNode( "atom:content", mgr ).InnerXml;
-            int csvStart = content.IndexOf( "RELEASE DATE,PUBLISHER,TITLE,PRICE" );
-            int csvEnd = content.IndexOf( "&lt;/p&gt;", csvStart );
-            content = content.Substring( csvStart, csvEnd - csvStart );
-            content = content.Replace( "&lt;br /&gt;", "" );
-            content = HttpUtility.HtmlDecode( content );
-            return content;
         }
     }
 }

@@ -25,6 +25,8 @@ using System.Threading.Tasks;
 using Microsoft.Win32;
 using System.IO;
 using ComicList.Lib.Configuration;
+using System.Diagnostics;
+using System.Web;
 
 namespace ComicList.ViewModel {
     /// <summary>
@@ -71,6 +73,7 @@ namespace ComicList.ViewModel {
         public ICommand SaveMyTitlesCommand { get { return new RelayCommand( SaveMyTitles ); } }
         public ICommand RefreshCurrentListCommand { get { return new RelayCommand( LoadComicEntries ); } }
         public ICommand FilterCurrentListCommand { get { return new RelayCommand<string>( LoadComicEntries ); } }
+        public ICommand ViewComicCommand { get { return new RelayCommand<ComicEntry>( ViewComic, CanViewComic ); } }
         public bool OmitVariantCovers { get; set; }
         public bool FirstPrintOnly { get; set; }
 
@@ -122,6 +125,14 @@ namespace ComicList.ViewModel {
             FilterComicsByPersonalizedList();
 
             IsLoadingComics = false;
+        }
+
+        private bool CanViewComic( ComicEntry entry ) {
+            return !string.IsNullOrWhiteSpace( entry.Url );
+        }
+
+        private void ViewComic( ComicEntry entry ) {
+            Process.Start( entry.Url );
         }
 
         private void AddMyComic(ComicEntry entry) {

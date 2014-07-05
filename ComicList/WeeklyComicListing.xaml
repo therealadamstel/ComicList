@@ -52,7 +52,10 @@
                         <GridViewColumn Header="">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button Style="{DynamicResource FlatButtonStyle}" Content="add" Margin="4" Command="{Binding Main.AddMyComicCommand, Source={StaticResource Locator}}" CommandParameter="{Binding}"></Button>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button Style="{DynamicResource FlatButtonStyle}" Content="add" Margin="4" Command="{Binding Main.AddMyComicCommand, Source={StaticResource Locator}}" CommandParameter="{Binding}"></Button>
+                                        <Button Style="{DynamicResource FlatButtonStyle}" Content="view" Margin="4" Command="{Binding Main.ViewComicCommand, Source={StaticResource Locator}}" CommandParameter="{Binding}"></Button>
+                                    </StackPanel>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
