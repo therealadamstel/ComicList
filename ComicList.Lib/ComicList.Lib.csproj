@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\ConfigPaths.cs" />
+    <Compile Include="Configuration\SystemCatalog.cs" />
     <Compile Include="Configuration\SystemSettings.cs" />
     <Compile Include="Configuration\UserComicSelection.cs" />
     <Compile Include="Fetcher\ComicEntry.cs" />

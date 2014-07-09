@@ -26,61 +26,46 @@ using System.Threading.Tasks;
 
 namespace ComicList.Lib.Configuration {
     public class SystemSettings : ObservableObject {
-        private ObservableCollection<UserComicSelection> _userComicSelection;
-        private ObservableCollection<DatedComicList> _comicLists;
+        public string OverrideSettingsFolderPath { get; set; }
 
+        [JsonIgnore]
+        public SystemCatalog Catalog { get; private set; }
+
+        [JsonIgnore]
+        [Obsolete("Use Catalog.ComicLists now", true)]
         public ObservableCollection<DatedComicList> ComicLists {
-            get { return _comicLists; }
-            set { _comicLists = value; }
+            get;
+            set;
         }
 
+        [JsonIgnore]
+        [Obsolete( "Use UserComicSelection.ComicLists now", true )]
         public ObservableCollection<UserComicSelection> UserComicSelection {
-            get { return _userComicSelection; }
-            set { _userComicSelection = value; }
+            get;
+            set;
         }
 
         public SystemSettings() {
-            _userComicSelection = new ObservableCollection<UserComicSelection>();
-            _comicLists = new ObservableCollection<DatedComicList>();
         }
 
-        public void AddComicList( DatedComicList comicList ) {
-            var existing = _comicLists.Where( x => x.Date == comicList.Date ).SingleOrDefault();
-            if( existing == null ) {
-                _comicLists.Add( comicList );
+        public void MoveCatalog( string directory ) {
+            if( directory != OverrideSettingsFolderPath ) {
+                // If the catalog already exists at the target path, we should NOT overwrite it
+                if( File.Exists( ConfigPaths.GetCatalogFilePath( directory ) ) == false ) {
+                    // Move the existing file first
+                    File.Move( ConfigPaths.GetCatalogFilePath( OverrideSettingsFolderPath ), ConfigPaths.GetCatalogFilePath( directory ) );
+                }
+                // Now save settings, but don't save the catalog because we've already handled that
+                OverrideSettingsFolderPath = directory;
+                Save( false );
             }
-            else {
-                existing.Comics = comicList.Comics;
-            }
-
-            // Remove old lists
-            foreach( var oldList in _comicLists.OrderByDescending( x => x.Date ).Skip( 10 ).ToArray() ) {
-                _comicLists.Remove( oldList );
-            }
-        }
-
-        public void AddUserComicSelection( UserComicSelection value ) {
-            var existing = FindUserComicSelection( value.TitleText );
-            if( existing == null ) {
-                _userComicSelection.Add( value );
-            }
-        }
-
-        public void RemoveUserComicSelection( UserComicSelection value ) {
-            var existing = FindUserComicSelection( value.TitleText );
-            if( existing != null ) {
-                _userComicSelection.Remove( existing );
-            }
-        }
-
-        private UserComicSelection FindUserComicSelection( string titleText ) {
-            return _userComicSelection.Where(
-                x => x.TitleText.Equals( titleText, StringComparison.OrdinalIgnoreCase ) ).SingleOrDefault();
         }
 
         public void Save() {
-            this.UserComicSelection.Sort( x => x.TitleText );
+            Save( true );
+        }
 
+        public void Save(bool saveCatalog) {
             string filePath = ConfigPaths.GetConfigurationFilePath();
             if( !Directory.Exists( Path.GetDirectoryName( filePath ) ) ) {
                 Directory.CreateDirectory( Path.GetDirectoryName( filePath ) );
@@ -92,9 +77,18 @@ namespace ComicList.Lib.Configuration {
                     serializer.Serialize( jsonWriter, this );
                 }
             }
+
+            if( saveCatalog )
+                Catalog.Save( OverrideSettingsFolderPath );
         }
 
         public static SystemSettings Load() {
+            if( File.Exists( ConfigPaths.GetOldConfigurationFilePath() ) ) {
+                // The old settings file exists, copy it to the two new files
+                File.Copy( ConfigPaths.GetOldConfigurationFilePath(), ConfigPaths.GetConfigurationFilePath() );
+                File.Move( ConfigPaths.GetOldConfigurationFilePath(), ConfigPaths.GetCatalogFilePath( null ) );
+            }
+
             SystemSettings settings;
             string filePath = ConfigPaths.GetConfigurationFilePath();
             if( File.Exists( filePath ) ) {
@@ -107,6 +101,8 @@ namespace ComicList.Lib.Configuration {
             else {
                 settings = new SystemSettings();
             }
+
+            settings.Catalog = SystemCatalog.Load( settings.OverrideSettingsFolderPath );
 
             return settings;
         }

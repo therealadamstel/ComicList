@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="ComicList.OptionsControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             DataContext="{Binding Options, Source={StaticResource Locator}}" Width="525" Loaded="UserControl_Loaded">
+    <StackPanel Orientation="Vertical" Margin="10">
+        <StackPanel Orientation="Horizontal">
+            <Label Content="Catalog Path:" Margin="4"></Label>
+            <TextBox Text="{Binding CatalogPath}" Width="300" IsReadOnly="True" Margin="4"></TextBox>
+            <Button Content="Browse..." Style="{StaticResource SquareButtonStyle}" Margin="4" Command="{Binding BrowseCommand}"></Button>
+            <Button Content="Clear" Style="{StaticResource SquareButtonStyle}" Margin="4" Command="{Binding ClearCommand}"></Button>
+        </StackPanel>
+        
+        <TextBlock TextWrapping="Wrap" MaxWidth="350">
+            <Run Text="If you want to use this application across multiple computers, set this path to a folder in your OneDrive or DropBox"></Run>
+            <Run Text="or other folder syncing program's path. Once done, your sync program will sync your catalog. Just be sure to only have"></Run>
+            <Run Text="one instance of this program running at a time."></Run>
+            <LineBreak></LineBreak>
+            <LineBreak></LineBreak>
+            <Run Text="Be sure that on this computer your folder has been sync'ed before you do this. Otherwise, you may overwrite your settings."></Run>
+        </TextBlock>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"  Margin="0,20,0,0">
+            <Button Content="Save Settings" Style="{StaticResource AccentedSquareButtonStyle}" Margin="4" Command="{Binding SaveCommand}"></Button>
+            <Button Content="Close" Style="{StaticResource SquareButtonStyle}" Margin="4" Click="Close_Click"></Button>
+        </StackPanel>
+    </StackPanel>
+</UserControl>

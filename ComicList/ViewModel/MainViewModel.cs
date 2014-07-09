@@ -48,6 +48,8 @@ namespace ComicList.ViewModel {
         private string _filterText;
         private string _addTitleText;
 
+        public SystemSettings SystemSettings { get { return _systemSettings; } }
+
         public string AddTitleText {
             get { return _addTitleText; }
             set { _addTitleText = value; RaisePropertyChanged( () => AddTitleText ); }
@@ -97,19 +99,27 @@ namespace ComicList.ViewModel {
         public bool FirstPrintOnly { get; set; }
 
         public MainViewModel() {
-            this._systemSettings = SystemSettings.Load();
-
             this.OmitVariantCovers = true;
             this.FirstPrintOnly = true;
-            this.WeeklyComics = new ObservableCollection<ComicEntry>();
-            this.GroupedWeeklyComics = (CollectionView) CollectionViewSource.GetDefaultView( this.WeeklyComics );
 
             PropertyGroupDescription groupDescription = new PropertyGroupDescription( "Publisher" );
+
+            this.WeeklyComics = new ObservableCollection<ComicEntry>();
+            this.GroupedWeeklyComics = (CollectionView) CollectionViewSource.GetDefaultView( this.WeeklyComics );
             this.GroupedWeeklyComics.GroupDescriptions.Add( groupDescription );
 
             this.MyComics = new ObservableCollection<ComicEntry>();
             this.GroupedMyComics = (CollectionView) CollectionViewSource.GetDefaultView( this.MyComics );
             this.GroupedMyComics.GroupDescriptions.Add( groupDescription );
+
+            Load();
+        }
+
+        public void Load() {
+            this._systemSettings = SystemSettings.Load();
+
+            this.WeeklyComics.Clear();
+            this.MyComics.Clear();
 
             LoadPersonalList();
             LoadSavedLists();
@@ -121,7 +131,7 @@ namespace ComicList.ViewModel {
             else
                 ComicLists.Clear();
 
-            foreach( var list in _systemSettings.ComicLists.OrderByDescending( x => x.Date ) ) {
+            foreach( var list in _systemSettings.Catalog.ComicLists.OrderByDescending( x => x.Date ) ) {
                 ComicLists.Add( list );
             }
         }
@@ -131,7 +141,7 @@ namespace ComicList.ViewModel {
                 PersonalComicList = new ObservableCollection<string>();
             PersonalComicList.Clear();
 
-            foreach( var userComicSelection in _systemSettings.UserComicSelection ) {
+            foreach( var userComicSelection in _systemSettings.Catalog.UserComicSelection ) {
                 PersonalComicList.Add( userComicSelection.TitleText );
             }
         }
@@ -177,7 +187,7 @@ namespace ComicList.ViewModel {
         }
 
         private void AddMyTitle( string title ) {
-            _systemSettings.AddUserComicSelection( new UserComicSelection() { TitleText = title } );
+            _systemSettings.Catalog.AddUserComicSelection( new UserComicSelection() { TitleText = title } );
             _systemSettings.Save();
 
             LoadPersonalList();
@@ -185,7 +195,7 @@ namespace ComicList.ViewModel {
         }
 
         private void RemoveMyComic( string title ) {
-            _systemSettings.RemoveUserComicSelection( new UserComicSelection() { TitleText = title } );
+            _systemSettings.Catalog.RemoveUserComicSelection( new UserComicSelection() { TitleText = title } );
             _systemSettings.Save();
 
             LoadPersonalList();
@@ -210,7 +220,7 @@ namespace ComicList.ViewModel {
 
             ComicLists.Clear();
             foreach( var list in listFetch.GetLists() ) {
-                _systemSettings.AddComicList( list );
+                _systemSettings.Catalog.AddComicList( list );
             }
             _systemSettings.Save();
 

@@ -21,7 +21,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace ComicList.Lib.Configuration {
-    static class ConfigPaths {
+    public class ConfigPaths {
         public static string GetConfigurationRootPath() {
             string path = Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData );
             path = Path.Combine( path, "ComicListApp", "Configuration" );
@@ -29,12 +29,23 @@ namespace ComicList.Lib.Configuration {
             return path;
         }
 
-        public static string GetConfigurationFilePath() {
+        public static string GetOldConfigurationFilePath() {
             return Path.Combine( GetConfigurationRootPath(), "Settings.json" );
         }
 
-        public static string GetListCachePath() {
-            return Path.Combine( GetConfigurationRootPath(), "Lists" );
+        public static string GetConfigurationFilePath() {
+            return Path.Combine( GetConfigurationRootPath(), "CLSettings.json" );
+        }
+
+        public static string GetCatalogFilePath(string directory) {
+            if( string.IsNullOrWhiteSpace( directory ) ) {
+                directory = GetConfigurationRootPath();
+            }
+            return Path.Combine( directory, GetCatalogFileName() );
+        }
+
+        public static string GetCatalogFileName() {
+            return "Catalog.json";
         }
     }
 }

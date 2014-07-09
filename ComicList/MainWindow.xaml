@@ -23,6 +23,7 @@
         xmlns:local="clr-namespace:ComicList" WindowState="Maximized">
     <controls:MetroWindow.RightWindowCommands>
         <controls:WindowCommands>
+            <Button Content="Options" Click="ShowOptions_Click"></Button>
             <Button Content="Credits" Click="ShowCredits_Click"></Button>
         </controls:WindowCommands>
     </controls:MetroWindow.RightWindowCommands>

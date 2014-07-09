@@ -49,5 +49,16 @@ namespace ComicList {
             };
             this.ShowMetroDialogAsync( dialog );
         }
+
+        private void ShowOptions_Click( object sender, RoutedEventArgs e ) {
+            var dialogBody = new OptionsControl();
+            var dialog = new SimpleDialog() {
+                DialogBody = dialogBody
+            };
+            dialogBody.Close += ( o, args ) => {
+                this.HideMetroDialogAsync( dialog );
+            };
+            this.ShowMetroDialogAsync( dialog );
+        }
     }
 }
