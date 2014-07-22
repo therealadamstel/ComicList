@@ -19,9 +19,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CsvHelper.Configuration;
+using Newtonsoft.Json;
 
 namespace ComicList.Lib.Fetcher {
     public class ComicEntry {
+        private string _releaseDateString;
+
+        [JsonIgnore]
+        public string ReleaseDateString {
+            get { return _releaseDateString; }
+            set {
+                if( !string.IsNullOrWhiteSpace( value ) ) {
+                    _releaseDateString = value;
+
+                    DateTime date;
+                    if( DateTime.TryParse( _releaseDateString, out date ) ) {
+                        ReleaseDate = date;
+                        IsValid = true;
+                    }
+                    else {
+                        IsValid = false;
+                    }
+                }
+            }
+        }
+        [JsonIgnore]
+        public bool IsValid { get; set; }
         public DateTime ReleaseDate { get; set; }
         public string Publisher { get; set; }
         public string Title { get; set; }
@@ -46,9 +69,13 @@ namespace ComicList.Lib.Fetcher {
             }
         }
 
+        public ComicEntry() {
+            IsValid = true;
+        }
+
         public class Map : CsvClassMap<ComicEntry> {
             public Map() {
-                Map( m => m.ReleaseDate ).Name( "RELEASE DATE" );
+                Map( m => m.ReleaseDateString ).Name( "RELEASE DATE" );
                 Map( m => m.Publisher ).Name( "PUBLISHER" );
                 Map( m => m.Title ).Name( "TITLE" );
                 Map( m => m.Price ).Name( "PRICE" );

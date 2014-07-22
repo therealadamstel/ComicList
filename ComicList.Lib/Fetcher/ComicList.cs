@@ -37,7 +37,7 @@ namespace ComicList.Lib.Fetcher {
         }
 
         public void AddShouldBefirstPrintFilter() {
-            AddFilter( entry => entry.Title.IndexOf( "printing", StringComparison.OrdinalIgnoreCase ) == -1 );
+            AddFilter( entry => entry.Title.IndexOf( "printing", StringComparison.OrdinalIgnoreCase ) == -1 || entry.Title.IndexOf( "1st print" ) > -1 );
         }
 
         public void OmitVariantCovers() {
@@ -54,13 +54,9 @@ namespace ComicList.Lib.Fetcher {
                 else if( sameTitleComics.Where( x => x.IssueNumber.ToLower().Contains( "cover a" ) ).Any() ) {
                     return entry.IssueNumber.ToLower().Contains( "cover a" );
                 }
-                else {
-                    return entry == sameTitleComics.First();
-                }
             }
-            else {
-                return true;
-            }
+
+            return true;
         }
 
         public void ClearFilters() {
