@@ -25,6 +25,10 @@ namespace ComicList.Lib.Configuration {
         private ObservableCollection<UserComicSelection> _userComicSelection;
         private ObservableCollection<DatedComicList> _comicLists;
 
+        public bool FilterPublishers { get; set; }
+        public bool OmitVariantCovers { get; set; }
+        public bool ShowFirstPrintOnly { get; set; }
+
         public ObservableCollection<DatedComicList> ComicLists {
             get { return _comicLists; }
             set { _comicLists = value; }
@@ -35,9 +39,22 @@ namespace ComicList.Lib.Configuration {
             set { _userComicSelection = value; }
         }
 
+        public ObservableCollection<string> WhitelistPublishers { get; set; }
+
         public SystemCatalog() {
             _userComicSelection = new ObservableCollection<UserComicSelection>();
             _comicLists = new ObservableCollection<DatedComicList>();
+            WhitelistPublishers = new ObservableCollection<string>();
+            FilterPublishers = false;
+            OmitVariantCovers = true;
+            ShowFirstPrintOnly = true;
+        }
+
+        public void SetWhitelistPublishers( IEnumerable<string> publishers ) {
+            WhitelistPublishers.Clear();
+            foreach( var publisher in publishers ) {
+                WhitelistPublishers.Add( publisher );
+            }
         }
 
         public void AddComicList( DatedComicList comicList ) {

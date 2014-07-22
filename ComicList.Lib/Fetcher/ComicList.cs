@@ -45,6 +45,12 @@ namespace ComicList.Lib.Fetcher {
             AddFilter( RestrictToRegularCoverIfItExists );
         }
 
+        public void AddPublisherFilter( IEnumerable<string> whitelistPublishers ) {
+            if( whitelistPublishers.Any() ) {
+                AddFilter( entry => whitelistPublishers.Any( x => x.Equals( entry.Publisher, StringComparison.OrdinalIgnoreCase ) ) );
+            }
+        }
+
         private bool RestrictToRegularCoverIfItExists( ComicEntry entry ) {
             var sameTitleComics = Comics.Where( e => e.SeriesTitle.Equals( entry.SeriesTitle, StringComparison.OrdinalIgnoreCase ) ).ToList();
             if( sameTitleComics.Count > 1 ) {

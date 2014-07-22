@@ -28,7 +28,7 @@
                 </TextBlock>
             </Label.Content>
         </Label>
-        <Border DockPanel.Dock="Bottom" Padding="10" BorderThickness="1" BorderBrush="DarkGray" Height="150">
+        <Border DockPanel.Dock="Bottom" Padding="10" BorderThickness="1" BorderBrush="DarkGray" Height="175">
             <StackPanel Orientation="Vertical">
                 <Button Content="Save to text file" Command="{Binding SaveMyTitlesCommand}" Style="{StaticResource AccentedSquareButtonStyle}"></Button>
             </StackPanel>

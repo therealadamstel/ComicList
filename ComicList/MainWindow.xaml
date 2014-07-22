@@ -27,6 +27,11 @@
             <Button Content="Credits" Click="ShowCredits_Click"></Button>
         </controls:WindowCommands>
     </controls:MetroWindow.RightWindowCommands>
+    <!--<controls:MetroWindow.Flyouts>
+        <controls:FlyoutsControl>
+            <controls:Flyout Header="Publishers" Width="200" Position="Left" IsOpen="True"></controls:Flyout>
+        </controls:FlyoutsControl>
+    </controls:MetroWindow.Flyouts>-->
     <Grid>
         <Grid>
             <Grid.ColumnDefinitions>

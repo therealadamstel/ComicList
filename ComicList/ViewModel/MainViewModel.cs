@@ -27,6 +27,7 @@ using System.IO;
 using ComicList.Lib.Configuration;
 using System.Diagnostics;
 using System.Web;
+using System.Collections.Generic;
 
 namespace ComicList.ViewModel {
     /// <summary>
@@ -43,12 +44,28 @@ namespace ComicList.ViewModel {
     /// </summary>
     public class MainViewModel : ViewModelBase {
         private bool _isLoadingComics;
+        private bool _showPublisherFilter;
         private SystemSettings _systemSettings;
         private DatedComicList _selectedComicList;
         private string _filterText;
         private string _addTitleText;
+        private ObservableCollection<ComicEntry> _weeklyComics;
+        private ObservableCollection<ComicEntry> _myComics;
 
         public SystemSettings SystemSettings { get { return _systemSettings; } }
+
+        public IEnumerable<SelectableEntity<string>> AvailablePublishers {
+            get;
+            set;
+        }
+
+        public bool ShowPublisherFilter {
+            get { return _showPublisherFilter; }
+            set {
+                _showPublisherFilter = value;
+                RaisePropertyChanged( () => ShowPublisherFilter );
+            }
+        }
 
         public string AddTitleText {
             get { return _addTitleText; }
@@ -75,8 +92,20 @@ namespace ComicList.ViewModel {
         }
 
         public ObservableCollection<ComicList.Lib.Fetcher.DatedComicList> ComicLists { get; set; }
-        public ObservableCollection<ComicEntry> WeeklyComics { get; set; }
-        public ObservableCollection<ComicEntry> MyComics { get; set; }
+        public ObservableCollection<ComicEntry> WeeklyComics {
+            get { return _weeklyComics; }
+            set {
+                _weeklyComics = value;
+                RaisePropertyChanged( () => WeeklyComics );
+            }
+        }
+        public ObservableCollection<ComicEntry> MyComics {
+            get { return _myComics; }
+            set {
+                _myComics = value;
+                RaisePropertyChanged( () => MyComics );
+            }
+        }
         public ObservableCollection<string> PersonalComicList { get; set; }
         public CollectionView GroupedMyComics { get; set; }
         public CollectionView GroupedWeeklyComics { get; set; }
@@ -87,6 +116,24 @@ namespace ComicList.ViewModel {
         public ICommand SaveMyTitlesCommand { get { return new RelayCommand( SaveMyTitles ); } }
         public ICommand RefreshCurrentListCommand { get { return new RelayCommand( LoadComicEntries ); } }
         public ICommand ViewComicCommand { get { return new RelayCommand<ComicEntry>( ViewComic, CanViewComic ); } }
+        public ICommand SavePublisherFilterCommand { get { return new RelayCommand( SavePublisherFilter ); } }
+        public ICommand ShowPublisherFilterCommand {
+            get {
+                return new RelayCommand( () => {
+                    AvailablePublishers = ( from cl in SystemSettings.Catalog.ComicLists
+                                            from c in cl.Comics
+                                            select c.Publisher )
+                       .Union( SystemSettings.Catalog.WhitelistPublishers )
+                       .Distinct()
+                       .OrderBy( x => x )
+                       .Select( x => new SelectableEntity<string>( x, SystemSettings.Catalog.WhitelistPublishers.Contains( x ) ) )
+                       .ToList();
+
+                    RaisePropertyChanged( () => AvailablePublishers );
+                    ShowPublisherFilter = true;
+                } ); 
+            }
+        }
         public ICommand ClearFilterTextCommand {
             get {
                 return new RelayCommand( () => {
@@ -97,26 +144,42 @@ namespace ComicList.ViewModel {
         }
         public bool OmitVariantCovers { get; set; }
         public bool FirstPrintOnly { get; set; }
+        public bool FilterPublishers { get; set; }
 
         public MainViewModel() {
             this.OmitVariantCovers = true;
             this.FirstPrintOnly = true;
-
-            PropertyGroupDescription groupDescription = new PropertyGroupDescription( "Publisher" );
+            this.FilterPublishers = true;
 
             this.WeeklyComics = new ObservableCollection<ComicEntry>();
-            this.GroupedWeeklyComics = (CollectionView) CollectionViewSource.GetDefaultView( this.WeeklyComics );
-            this.GroupedWeeklyComics.GroupDescriptions.Add( groupDescription );
+            LoadGroupedWeeklyComics();
 
             this.MyComics = new ObservableCollection<ComicEntry>();
-            this.GroupedMyComics = (CollectionView) CollectionViewSource.GetDefaultView( this.MyComics );
-            this.GroupedMyComics.GroupDescriptions.Add( groupDescription );
+            LoadGroupedMyComics();
 
             Load();
         }
 
+        private void LoadGroupedMyComics() {
+            PropertyGroupDescription groupDescription = new PropertyGroupDescription( "Publisher" );
+            this.GroupedMyComics = (CollectionView) CollectionViewSource.GetDefaultView( this.MyComics );
+            this.GroupedMyComics.GroupDescriptions.Add( groupDescription );
+            RaisePropertyChanged( () => GroupedMyComics );
+        }
+
+        private void LoadGroupedWeeklyComics() {
+            PropertyGroupDescription groupDescription = new PropertyGroupDescription( "Publisher" );
+            this.GroupedWeeklyComics = (CollectionView) CollectionViewSource.GetDefaultView( this.WeeklyComics );
+            this.GroupedWeeklyComics.GroupDescriptions.Add( groupDescription );
+            RaisePropertyChanged( () => GroupedWeeklyComics );
+        }
+
         public void Load() {
             this._systemSettings = SystemSettings.Load();
+
+            this.FilterPublishers = _systemSettings.Catalog.FilterPublishers;
+            this.OmitVariantCovers = _systemSettings.Catalog.OmitVariantCovers;
+            this.FirstPrintOnly = _systemSettings.Catalog.ShowFirstPrintOnly;
 
             this.WeeklyComics.Clear();
             this.MyComics.Clear();
@@ -206,10 +269,9 @@ namespace ComicList.ViewModel {
             var query = from entry in WeeklyComics
                         join myComic in PersonalComicList on entry.SeriesTitle.ToLower().Trim() equals myComic.ToLower().Trim()
                         select entry;
-            MyComics.Clear();
-            foreach( var match in query ) {
-                MyComics.Add( match );
-            }
+
+            MyComics = new ObservableCollection<ComicEntry>( query );
+            LoadGroupedMyComics();
         }
 
         private async Task LoadComics() {
@@ -232,7 +294,18 @@ namespace ComicList.ViewModel {
                 WeeklyComics.Clear();
             }
             else {
+                if( FilterPublishers != SystemSettings.Catalog.FilterPublishers
+                    || OmitVariantCovers != SystemSettings.Catalog.OmitVariantCovers
+                    || FirstPrintOnly != SystemSettings.Catalog.ShowFirstPrintOnly ) {
+                    SystemSettings.Catalog.FilterPublishers = FilterPublishers;
+                    SystemSettings.Catalog.OmitVariantCovers = OmitVariantCovers;
+                    SystemSettings.Catalog.ShowFirstPrintOnly = FirstPrintOnly;
+                    SystemSettings.Save();
+                }
+
                 SelectedComicList.ClearFilters();
+                if( FilterPublishers )
+                    SelectedComicList.AddPublisherFilter( SystemSettings.Catalog.WhitelistPublishers );
                 if( FirstPrintOnly )
                     SelectedComicList.AddShouldBefirstPrintFilter();
                 if( OmitVariantCovers )
@@ -240,13 +313,18 @@ namespace ComicList.ViewModel {
                 if( !string.IsNullOrEmpty( FilterText ) )
                     SelectedComicList.AddFilter( entry => entry.Title.ToLower().Contains( FilterText.ToLower() ) );
 
-                WeeklyComics.Clear();
-                foreach( var comic in SelectedComicList.GetEntries() ) {
-                    WeeklyComics.Add( comic );
-                }
+                WeeklyComics = new ObservableCollection<ComicEntry>( SelectedComicList.GetEntries() );
+                LoadGroupedWeeklyComics();
             }
 
             FilterComicsByPersonalizedList();
+        }
+
+        private void SavePublisherFilter() {
+            var selectedPublishers = AvailablePublishers.Where( x => x.IsSelected ).Select( x => x.Entity ).ToList();
+            SystemSettings.Catalog.SetWhitelistPublishers( selectedPublishers );
+            SystemSettings.Save();
+            ShowPublisherFilter = false;
         }
     }
 }
