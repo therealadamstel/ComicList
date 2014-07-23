@@ -234,6 +234,12 @@ namespace ComicList.ViewModel {
         private void SaveMyTitles() {
             SaveFileDialog saveDialog = new SaveFileDialog();
             saveDialog.Filter = "Text Files (*.txt)|*.txt";
+            if( SelectedComicList != null ) {
+                saveDialog.FileName = "Pull list for " + SelectedComicList.Date.ToString( "MM-dd-yy" ) + ".txt";
+            }
+            else {
+                saveDialog.FileName = "Pull list.txt";
+            }
             if( saveDialog.ShowDialog() ?? false ) {
                 string path = saveDialog.FileName;
                 using( var writer = new StreamWriter( path, false ) ) {
