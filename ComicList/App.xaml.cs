@@ -49,7 +49,7 @@ namespace ComicList {
 
         private void LogUnhandledException( Exception ex ) {
             if( ex != null ) {
-                _logger.Log( LogLevel.Error, "Unhandled exception", ex );
+                _logger.Log( LogLevel.Error, ex.ToString() );
             }
         }
     }
