@@ -124,7 +124,7 @@ namespace ComicList.ViewModel {
         public ICommand LoadWeeklyComicsCommand { get { return new RelayCommand( LoadWeeklyComics ); } }
         public ICommand AddMyComicCommand { get { return new RelayCommand<ComicEntry>( AddMyComic ); } }
         public ICommand AddMyTitleCommand { get { return new RelayCommand( AddMyTitle ); } }
-        public ICommand RemoveMyComicCommand { get { return new RelayCommand<UserComicSelection>( RemoveMyComic ); } }
+        public ICommand RemoveMyComicCommand { get { return new RelayCommand<UserComicSelectionModel>( RemoveMyComic ); } }
         public ICommand SaveMyTitlesCommand { get { return new RelayCommand( SaveMyTitles ); } }
         public ICommand RefreshCurrentListCommand { get { return new RelayCommand( LoadComicEntries ); } }
         public ICommand ViewComicCommand { get { return new RelayCommand<ComicEntry>( ViewComic, CanViewComic ); } }
@@ -285,8 +285,8 @@ namespace ComicList.ViewModel {
             FilterComicsByPersonalizedList();
         }
 
-        private void RemoveMyComic( UserComicSelection selection ) {
-            _systemSettings.Catalog.RemoveUserComicSelection( selection );
+        private void RemoveMyComic( UserComicSelectionModel selection ) {
+            _systemSettings.Catalog.RemoveUserComicSelection( selection.Value );
             _systemSettings.Save();
 
             LoadPersonalList();
