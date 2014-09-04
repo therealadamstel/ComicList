@@ -80,10 +80,7 @@ namespace ComicList.Lib.Configuration {
         }
 
         public void RemoveUserComicSelection( UserComicSelection value ) {
-            var existing = FindUserComicSelection( value.TitleText );
-            if( existing != null ) {
-                _userComicSelection.Remove( existing );
-            }
+            _userComicSelection.Remove( value );
         }
 
         private UserComicSelection FindUserComicSelection( string titleText ) {

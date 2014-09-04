@@ -31,17 +31,36 @@
         </Label>
         <Border DockPanel.Dock="Bottom" Padding="10" BorderThickness="1" BorderBrush="DarkGray" Height="175">
             <StackPanel Orientation="Vertical">
-                <TextBox x:Name="ComicNameText" controls:TextboxHelper.ClearTextButton="True" controls:TextboxHelper.Watermark="Enter title and press enter to add" Text="{Binding AddTitleText, UpdateSourceTrigger=PropertyChanged}">
+                <TextBox x:Name="ComicNameText" Margin="0,4" controls:TextboxHelper.ClearTextButton="True" controls:TextboxHelper.Watermark="Enter title and press enter to add" Text="{Binding AddTitleText, UpdateSourceTrigger=PropertyChanged}">
                     <TextBox.InputBindings>
                         <KeyBinding Key="Enter" Command="{Binding AddMyTitleCommand}"></KeyBinding>
                     </TextBox.InputBindings>
                 </TextBox>
+                
+                <ComboBox Margin="0,4" SelectedIndex="{Binding PersonalComicListSort}">
+                    <ComboBoxItem IsSelected="True">Sort: Title</ComboBoxItem>
+                    <ComboBoxItem>Sort: Priority</ComboBoxItem>
+                </ComboBox>
             </StackPanel>
         </Border>
         <ListView ItemsSource="{Binding PersonalComicList}" BorderThickness="1" BorderBrush="DarkGray" Padding="10">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Title" Width="350"></GridViewColumn>
+                    <GridViewColumn Header="Title" Width="285" DisplayMemberBinding="{Binding TitleText}"></GridViewColumn>
+                    <GridViewColumn Header="Priority" Width="65">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding Priority, Mode=TwoWay}" HorizontalAlignment="Stretch"></TextBox>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Notes" Width="100">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding Notes, Mode=TwoWay}" HorizontalAlignment="Stretch"></TextBox>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                     <GridViewColumn Header="">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>

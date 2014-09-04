@@ -145,9 +145,11 @@
     <Compile Include="OptionsControl.xaml.cs">
       <DependentUpon>OptionsControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\Enums.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\OptionsViewModel.cs" />
     <Compile Include="ViewModel\SelectableEntity.cs" />
+    <Compile Include="ViewModel\UserComicSelectionModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="WeeklyComicListing.xaml.cs">
       <DependentUpon>WeeklyComicListing.xaml</DependentUpon>

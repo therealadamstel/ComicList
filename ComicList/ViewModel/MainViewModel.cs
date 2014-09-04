@@ -28,6 +28,7 @@ using ComicList.Lib.Configuration;
 using System.Diagnostics;
 using System.Web;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace ComicList.ViewModel {
     /// <summary>
@@ -51,12 +52,23 @@ namespace ComicList.ViewModel {
         private string _addTitleText;
         private ObservableCollection<ComicEntry> _weeklyComics;
         private ObservableCollection<ComicEntry> _myComics;
-
+        private SortType _sortType;
         public SystemSettings SystemSettings { get { return _systemSettings; } }
 
         public IEnumerable<SelectableEntity<string>> AvailablePublishers {
             get;
             set;
+        }
+
+        public int PersonalComicListSort {
+            get { return (int) _sortType; }
+            set {
+                if( (int) _sortType != value ) {
+                    _sortType = (SortType) value;
+
+                    LoadPersonalList();
+                }
+            }
         }
 
         public bool ShowPublisherFilter {
@@ -106,13 +118,13 @@ namespace ComicList.ViewModel {
                 RaisePropertyChanged( () => MyComics );
             }
         }
-        public ObservableCollection<string> PersonalComicList { get; set; }
+        public CollectionView PersonalComicList { get; set; }
         public CollectionView GroupedMyComics { get; set; }
         public CollectionView GroupedWeeklyComics { get; set; }
         public ICommand LoadWeeklyComicsCommand { get { return new RelayCommand( LoadWeeklyComics ); } }
         public ICommand AddMyComicCommand { get { return new RelayCommand<ComicEntry>( AddMyComic ); } }
         public ICommand AddMyTitleCommand { get { return new RelayCommand( AddMyTitle ); } }
-        public ICommand RemoveMyComicCommand { get { return new RelayCommand<string>( RemoveMyComic ); } }
+        public ICommand RemoveMyComicCommand { get { return new RelayCommand<UserComicSelection>( RemoveMyComic ); } }
         public ICommand SaveMyTitlesCommand { get { return new RelayCommand( SaveMyTitles ); } }
         public ICommand RefreshCurrentListCommand { get { return new RelayCommand( LoadComicEntries ); } }
         public ICommand ViewComicCommand { get { return new RelayCommand<ComicEntry>( ViewComic, CanViewComic ); } }
@@ -200,13 +212,23 @@ namespace ComicList.ViewModel {
         }
 
         private void LoadPersonalList() {
-            if( PersonalComicList == null )
-                PersonalComicList = new ObservableCollection<string>();
-            PersonalComicList.Clear();
+            var list = new ObservableCollection<UserComicSelectionModel>();
 
             foreach( var userComicSelection in _systemSettings.Catalog.UserComicSelection ) {
-                PersonalComicList.Add( userComicSelection.TitleText );
+                list.Add( new UserComicSelectionModel( userComicSelection, _systemSettings.Save ) );
             }
+
+            SortDescription sortDesc;
+            if( _sortType == SortType.Title ) {
+                sortDesc = new SortDescription( "TitleText", ListSortDirection.Ascending );
+            }
+            else {
+                sortDesc = new SortDescription( "Priority", ListSortDirection.Ascending );
+            }
+            this.PersonalComicList = (CollectionView) CollectionViewSource.GetDefaultView( list );
+            this.PersonalComicList.SortDescriptions.Clear();
+            this.PersonalComicList.SortDescriptions.Add( sortDesc );
+            RaisePropertyChanged( () => PersonalComicList );
         }
 
         public async void LoadWeeklyComics() {
@@ -263,8 +285,8 @@ namespace ComicList.ViewModel {
             FilterComicsByPersonalizedList();
         }
 
-        private void RemoveMyComic( string title ) {
-            _systemSettings.Catalog.RemoveUserComicSelection( new UserComicSelection() { TitleText = title } );
+        private void RemoveMyComic( UserComicSelection selection ) {
+            _systemSettings.Catalog.RemoveUserComicSelection( selection );
             _systemSettings.Save();
 
             LoadPersonalList();
@@ -273,7 +295,7 @@ namespace ComicList.ViewModel {
 
         private void FilterComicsByPersonalizedList() {
             var query = from entry in WeeklyComics
-                        join myComic in PersonalComicList on entry.SeriesTitle.ToLower().Trim() equals myComic.ToLower().Trim()
+                        join myComic in PersonalComicList.OfType<UserComicSelectionModel>() on entry.SeriesTitle.ToLower().Trim() equals myComic.TitleText.ToLower().Trim()
                         select entry;
 
             MyComics = new ObservableCollection<ComicEntry>( query );

@@ -22,5 +22,11 @@ using System.Threading.Tasks;
 namespace ComicList.Lib.Configuration {
     public class UserComicSelection {
         public string TitleText { get; set; }
+        public int Priority { get; set; }
+        public string Notes { get; set; }
+
+        public UserComicSelection() {
+            Priority = 1;
+        }
     }
 }
