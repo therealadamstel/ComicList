@@ -146,11 +146,11 @@ namespace ComicList.Lib.Fetcher {
             list.Title = title;
             list.Date = DateTime.Parse( Regex.Match(title, @"\d{2}/\d{2}/\d{4}").Value);
 
-            foreach( var publisherNode in doc.DocumentNode.SelectNodes( "//p/a[starts-with(@href, 'http://www.shareasale.com/')]/b/u" ) ) {
+            foreach( var publisherNode in doc.DocumentNode.SelectNodes( "//p/a/b/u" ) ) {
                 string publisher = publisherNode.InnerText;
 
                 HtmlNode firstParent = publisherNode.Ancestors( "p" ).First();
-                foreach( var comicNode in firstParent.SelectNodes( "a[starts-with(@href, 'http://www.shareasale.com/')]" ).Skip(1) ) {
+                foreach( var comicNode in firstParent.SelectNodes( "a" ).Skip( 1 ) ) {
                     string href = comicNode.Attributes["href"].Value;
                     string comicTitle = comicNode.InnerText;
 
